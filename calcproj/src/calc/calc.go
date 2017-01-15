@@ -14,7 +14,6 @@ func Usage() {
 }
 
 func main() {
-  e := echo.New()
   args := os.Args
   if args == nil || len(args) < 2 {
     Usage()
