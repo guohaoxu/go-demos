@@ -4,7 +4,7 @@ package main
 import (
   "os"
   "fmt"
-  "simplemath"
+  "go-demos/calcproj/simplemath"
   "strconv"
 )
 
