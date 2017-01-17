@@ -12,7 +12,7 @@ var wg sync.WaitGroup
 func main() {
   wg.Add(2)
 
-  fmt.Println("Start Goroutines")s
+  fmt.Println("Start Goroutines")
   go printCounts("A")
   go printCounts("B")
   fmt.Println("Waiting To Finish")
