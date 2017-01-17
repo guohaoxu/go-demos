@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+	<meta name="renderer" content="webkit" >
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<title>一呼百应金融-中小企业贷款撮合平台</title>
+	<link rel="shortcut icon" type="image/x-icon" href="static/images/jrYouboy.ico">
+    <link rel="stylesheet" href="static/style/common.css">
+	<link rel="stylesheet" href="static/style/layout.css">
+	<script src="static/script/lib/jquery.js"></script>
+	<script src="static/script/youboyUI.js"></script>
+</head>
+
+<body>
+	<!--头部-->
+	<div class="topbar">
+		<div class="wrap">
+			<div class="topbar_l"><a class="back_yb" href="#"><em class="gw_icon"></em>一呼百应官网</a>
+				<div class="city">
+					<span class="city_icon"></span>
+					<span class="pit_city">广州</span><a class="change_city" href="javascript:;">[切换]</a>
+					<div class="city_pos">
+						<h4>请选择城市</h4>
+						<ul class="city_list">
+							<li>
+								<label>热门城市</label>
+								<div>
+									<span>广州</span>
+									<span>深圳</span>
+									<span>北京</span>
+									<span>上海</span>
+								</div>
+							</li>
+							<li>
+								<label>广东省</label>
+								<div>
+									<span>广州</span>
+									<span>深圳</span>
+									<span>珠海</span>
+									<span>东莞</span>
+									<span>佛山</span>
+									<span>中山</span>
+									<span>惠州</span>
+									<span>汕头</span>
+									<span>江门</span>
+									<span>茂名</span>
+									<span>肇庆</span>
+									<span>湛江</span>
+									<span>梅州</span>
+									<span>汕尾</span>
+									<span>河源</span>
+									<span>清远</span>
+									<span>韶关</span>
+									<span>揭阳</span>
+									<span>阳江</span>
+									<span>潮州</span>
+									<span>云浮</span>
+								</div>
+							</li>
+							<li>
+								<label>浙江省</label>
+								<div>
+									<span>杭州</span>
+									<span>宁波</span>
+									<span>嘉兴</span>
+									<span>海宁</span>
+									<span>湖州</span>
+									<span>绍兴</span>
+									<span>金华</span>
+									<span>温州</span>
+									<span>义乌</span>
+									<span>衢州</span>
+									<span>台州</span>
+								</div>
+							</li>
+							<li>
+								<label>江苏省</label>
+								<div>
+									<span>南通</span>
+									<span>无锡</span>
+									<span>苏州</span>
+									<span>镇江</span>
+									<span>南京</span>
+									<span>徐州</span>
+									<span>常州</span>
+									<span>常熟</span>
+									<span>扬州</span>
+									<span>淮安</span>
+									<span>连云港</span>
+								</div>
+							</li>
+							<li>
+								<label>江西省</label>
+								<div>
+									<span>南昌</span>
+									<span>九江</span>
+									<span>上饶</span>
+									<span>赣州</span>
+									<span>新余</span>
+								</div>
+							</li>
+							<li>
+								<label>福建省</label>
+								<div>
+									<span>福州</span>
+									<span>泉州</span>
+									<span>三明</span>
+									<span>南平</span>
+									<span>龙岩</span>
+								</div>
+							</li>
+							<li>
+								<label>安徽省</label>
+								<div>
+									<span>合肥</span>
+									<span>宣城</span>
+									<span>安庆</span>
+									<span>马鞍山</span>
+									<span>黄山</span>
+									<span>滁州</span>
+									<span>六安</span>
+									<span>铜陵</span>
+								</div>
+							</li>
+							<li>
+								<label>山东省</label>
+								<div>
+									<span>临沂</span>
+									<span>济南</span>
+									<span>青岛</span>
+									<span>淄博</span>
+									<span>烟台</span>
+									<span>威海</span>
+								</div>
+							</li>
+							<li>
+								<label>山西省</label>
+								<div>
+									<span>太原</span>
+								</div>
+							</li>
+							<li>
+								<label>湖北省</label>
+								<div>
+									<span>武汉</span>
+									<span>襄樊市</span>
+									<span>黄石市</span>
+								</div>
+							</li>
+							<li>
+								<label>湖南省</label>
+								<div>
+									<span>长沙</span>
+									<span>衡阳</span>
+									<span>邵阳</span>
+									<span>岳阳</span>
+									<span>张家界</span>
+									<span>怀化</span>
+								</div>
+							</li>
+							<li>
+								<label>河北省</label>
+								<div>
+									<span>石家庄</span>
+									<span>唐山</span>
+									<span>保定</span>
+								</div>
+							</li>
+							<li>
+								<label>直辖市</label>
+								<div>
+									<span>上海</span>
+									<span>北京</span>
+									<span>天津</span>
+									<span>重庆</span>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="topbar_r">
+				<ul>
+					<li><a class="log_a" href="presonal_login.html"><em class="log_icon"></em>登录</a></li>
+					<li><a class="reg_a" href="presonal_register.html">注册</a></li>
+					<li class="handler_log"><span>信贷经理/机构<em class="arr"></em></span>
+						<div class="handler_log_show"><a href="manager_login.html">登录</a><a href="manager_register.html">注册</a></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+	<div class="new_logo">
+		<div class="wrap">
+			<div class="new_logo_n"><a href="#"><img src="static/images/index/new_logo.png"  height="55" alt="一呼百应金融"></a></div>
+			<div class="new_nav"><a class="cur" href="index.html">首页<em></em></a><a href="enterpriseLoan.html">企业贷款<em></em></a><a href="#">个人贷款<em></em></a><span class="line"></span><span class="ani_bg"></span></div>
+		</div>
+	</div>
+	<!--头部结束-->
+	<!--banner 申请-->
+	<div class="s_ban">
+		<div class="s_banner">
+			<ul>
+				<li style="background: url(static/images/index/s_banner_01.jpg) no-repeat 50% 50% #00b8c7;"></li>
+			</ul>
+		</div>
+		<div class="s_apply">
+			<h2>在线申请贷款</h2>
+			<form>
+				<ul>
+					<li>
+						<label>贷款金额</label>
+						<div class="in_white"><input class="wid210" type="text" value="10" maxlength="3" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"><span class="wan">万元</span><span class="tip"><em class="tip_icon"></em>请输入贷款金额<em class="arr"></em></span></div>
+						<p class="lxw_tips" id="loanMobileCodeTip">输入错误</p>
+					</li>
+					<li>
+						<label>手机号码</label>
+						<div class="in_white"><input class="wid245" type="text" value="" maxlength="11" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"><span class="tip"><em class="tip_icon"></em>请输入手机号码<em class="arr"></em></span></div>
+					</li>
+					<li>
+						<label>手机验证码</label>
+						<div class="in_white"><input class="wid165" type="text" value="" maxlength="6"><input class="validateBtn" type="button" value="获取验证码" id="getMobileCode"><span class="tip"><em class="tip_icon"></em>请输入手机验证码<em class="arr"></em></span></div>
+					</li>
+					<li><input class="subBtn" type="button" value="立即申请" onclick="sy.showSapply()"></li>
+				</ul>
+			</form>
+			<p class="txt">在线提交申请，顾问第一时间与您沟通，快速为您指定针对性贷款方案。</p>
+		</div>
+	</div>
+	
+	<div class="new_cont">
+		<div class="wrap fn_clear">
+			<div class="outstand fn_clear">
+				<ul>
+					<li>
+						<div class="outstand_icon_1"></div>
+						<h2><span class="f77">2,102</span>家银行机构</h2>
+						<div class="txt">建行、工商、招商、民生、宜信</div>
+					</li>
+					<li>
+						<div class="outstand_icon_2"></div>
+						<h2><span class="f77">3,298</span>位信贷经理</h2>
+						<div class="txt">国有银行、P2P、小贷公司</div>
+					</li>
+					<li>
+						<div class="outstand_icon_3"></div>
+						<h2><span class="f77">9,556</span>款贷款产品</h2>
+						<div class="txt">企业经营、企业流水、个人消费</div>
+					</li>
+					<li class="last">
+						<div class="outstand_icon_4"></div>
+						<h2>成功申请<span class="f77">11,064</span>万元</h2>
+						<div class="txt">
+							<p>成功放款企业676家<br>成功放款个人608位</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!--快速通道，贷款流程，咨询顾问-->
+			<div class="txt_tit">
+				<h1>一呼百应金融平台</h1>
+				<p>携手银行机构推出企业免抵押、免担保信用贷款为有资金需求的企业开辟绿色通道！</p>
+			</div>
+			<div class="new_cont_l">
+				<div class="e_loan">
+					<div class="e_loan_a">
+						<ul class="fn_clear">
+							<li><a class="e_loan_1" href="#"><em class="eLoan_ico1"></em><strong>第一次贷款</strong><span>不知怎么贷款？顾问来帮我。</span><em class="bot1"></em></a></li>
+							<li><a class="e_loan_2" href="#"><em class="eLoan_ico2"></em><strong>企业贷款</strong><span>中小企业贷款绿色通道</span><em class="bot2"></em></a></li>
+							<li class="last"><a class="e_loan_3" href="#"><em class="eLoan_ico3"></em><strong>个人贷款</strong><span>足不出户，轻松贷款</span><em class="bot3"></em></a></li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="flow_loan">
+					<div class="tag">贷款流程</div>
+					<div class="step_1"><a href="#">在线提交申请</a></div>
+				</div>
+				
+			</div>
+			<div class="new_cont_r">
+				
+				<div class="r_adviser">
+					<h2>免费咨询顾问</h2>
+					<div class="r_adviser_f">
+						<ul>
+						<li class="fn_clear"><a href="#">
+							<div class="tx"><img src="static/images/index/r_adviser_tx_01.jpg" alt="#"></div>
+							<div class="txt"><span class="name">林经理</span><span class="adviser_icon_1"></span><span class="adviser_icon_2"></span></div>
+							<div class="has_helped">已帮助139人/企业贷款成功</div>
+							</a>
+						</li>
+						<li class="fn_clear"><a href="#">
+							<div class="tx"><img src="static/images/index/r_adviser_tx_02.jpg" alt="#"></div>
+							<div class="txt"><span class="name">张经理</span><span class="adviser_icon_1"></span><span class="adviser_icon_2"></span></div>
+							<div class="has_helped">已帮助98人/企业贷款成功</div>
+							</a>
+						</li>
+						<li class="fn_clear"><a href="#">
+							<div class="tx"><img src="static/images/index/r_adviser_tx_03.jpg" alt="#"></div>
+							<div class="txt"><span class="name">罗经理</span><span class="adviser_icon_1"></span><span class="adviser_icon_2"></span></div>
+							<div class="has_helped">已帮助214人/企业贷款成功</div>
+							</a>
+						</li>
+						<li class="fn_clear"><a href="#">
+							<div class="tx"><img src="static/images/index/r_adviser_tx_01.jpg" alt="#"></div>
+							<div class="txt"><span class="name">孙经理</span><span class="adviser_icon_1"></span><span class="adviser_icon_2"></span></div>
+							<div class="has_helped">已帮助302人/企业贷款成功</div>
+							</a>
+						</li>
+						<li class="fn_clear"><a href="#">
+							<div class="tx"><img src="static/images/index/r_adviser_tx_01.jpg" alt="#"></div>
+							<div class="txt"><span class="name">孙经理2</span><span class="adviser_icon_1"></span><span class="adviser_icon_2"></span></div>
+							<div class="has_helped">已帮助302人/企业贷款成功</div>
+							</a>
+						</li>
+					</ul>
+					</div>
+					<div class="p_n fn_clear"><a class="prev" href="javascript:;">prev</a><a class="next" href="javascript:;">next</a></div>
+				</div>
+				
+			</div>
+			
+			<!--推荐产品-->
+			<div class="txt_tit">
+				<h1>推荐产品</h1>
+				<p>专业顾问推荐，帮助中小企业解决贷款难题</p>
+			</div>
+			<div class="pro_loan">
+				<div class="pro_loan_s fn_clear">
+					<ul>
+						<li>
+							<h2>无需抵押</h2>
+							<div class="img_logo"><a href="#"><img src="static/images/index/pro_loan_temp_01.jpg" alt="你我贷"></a>
+								<p>私营企业主贷</p>
+							</div>
+							<div class="merits"><span><em class="tick"></em>无需抵押</span><span><em class="tick"></em>额度高</span><span><em class="tick"></em>放款速度快</span></div>
+							<div class="pro_loan_a"><a href="###">查看详情</a></div>
+						</li>
+						<li>
+							<h2>随借随还</h2>
+							<div class="img_logo"><a href="#"><img src="static/images/index/pro_loan_temp_02.jpg" alt="你我贷"></a>
+								<p>企业循环贷</p>
+							</div>
+							<div class="merits"><span><em class="tick"></em>无需抵押</span><span><em class="tick"></em>额度高</span><span><em class="tick"></em>放款速度快</span></div>
+							<div class="pro_loan_a"><a href="###">查看详情</a></div>
+						</li>
+						<li>
+							<h2>还款灵活</h2>
+							<div class="img_logo"><a href="#"><img src="static/images/index/pro_loan_temp_03.jpg" alt="你我贷"></a>
+								<p>法人老板贷</p>
+							</div>
+							<div class="merits"><span><em class="tick"></em>无需抵押</span><span><em class="tick"></em>额度高</span><span><em class="tick"></em>放款速度快</span></div>
+							<div class="pro_loan_a"><a href="###">查看详情</a></div>
+						</li>
+						<li class="last">
+							<h2>1天放款</h2>
+							<div class="img_logo"><a href="#"><img src="static/images/index/pro_loan_temp_03.jpg" alt="你我贷"></a>
+								<p>商悦贷</p>
+							</div>
+							<div class="merits"><span><em class="tick"></em>无需抵押</span><span><em class="tick"></em>额度高</span><span><em class="tick"></em>放款速度快</span></div>
+							<div class="pro_loan_a"><a href="###">查看详情</a></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<!--成功案例-->
+			<div class="txt_tit">
+				<h1>成功案例</h1>
+				<p>我们用技术让借贷更简单，借款人更易借到款，获得更高额度。</p>
+			</div>
+			<div class="succ_cases">
+				<div class="cases_wrap">
+					<div class="cases_wrap_div">
+						<div class="cases_per">
+							<h2>北京xxxx服装有限公司01</h2>
+							<div class="org_num">
+								<div class="le">
+									<p><img src="static/images/index/butt_organ_03.jpg" alt="中国银行" onclick="popupImg.popup(this)"></p>
+									<p><span>放款机构</span></p>
+								</div>
+								<div class="ri">
+									<p class="f77"><strong>160</strong>万</p>
+									<p>成功放款金额</p>
+								</div>
+							</div>
+							<div class="desc">贷款人：张先生<br>企业资质：企业经营2年，对公对私流水共100万，有一套房子，有负债。</div>
+						</div>
+						<div class="cases_per">
+							<h2>杭州xxxx服装有限公司02</h2>
+							<div class="org_num">
+								<div class="le">
+									<p><img src="static/images/index/butt_organ_04.jpg" alt="中国银行"></p>
+									<p><span>放款机构</span></p>
+								</div>
+								<div class="ri">
+									<p class="f77"><strong>160</strong>万</p>
+									<p>成功放款金额</p>
+								</div>
+							</div>
+							<div class="desc">贷款人：张先生<br>企业资质：企业经营2年，对公对私流水共100万，有一套房子，有负债。</div>
+						</div>
+						<div class="cases_per">
+							<h2>杭州xxxx服装有限公司03</h2>
+							<div class="org_num">
+								<div class="le">
+									<p><img src="static/images/index/butt_organ_05.jpg" alt="中国银行"></p>
+									<p><span>放款机构</span></p>
+								</div>
+								<div class="ri">
+									<p class="f77"><strong>160</strong>万</p>
+									<p>成功放款金额</p>
+								</div>
+							</div>
+							<div class="desc">贷款人：张先生<br>企业资质：企业经营2年，对公对私流水共100万，有一套房子，有负债。</div>
+						</div>
+						<div class="cases_per">
+							<h2>杭州xxxx服装有限公司04</h2>
+							<div class="org_num">
+								<div class="le">
+									<p><img src="static/images/index/butt_organ_06.jpg" alt="中国银行"></p>
+									<p><span>放款机构</span></p>
+								</div>
+								<div class="ri">
+									<p class="f77"><strong>160</strong>万</p>
+									<p>成功放款金额</p>
+								</div>
+							</div>
+							<div class="desc">贷款人：张先生<br>企业资质：企业经营2年，对公对私流水共100万，有一套房子，有负债。</div>
+						</div>
+						<div class="cases_per">
+							<h2>杭州xxxx服装有限公司05</h2>
+							<div class="org_num">
+								<div class="le">
+									<p><img src="static/images/index/butt_organ_07.jpg" alt="中国银行"></p>
+									<p><span>放款机构</span></p>
+								</div>
+								<div class="ri">
+									<p class="f77"><strong>160</strong>万</p>
+									<p>成功放款金额</p>
+								</div>
+							</div>
+							<div class="desc">贷款人：张先生<br>企业资质：企业经营2年，对公对私流水共100万，有一套房子，有负债。</div>
+						</div>
+						<div class="cases_per">
+							<h2>杭州xxxx服装有限公司06</h2>
+							<div class="org_num">
+								<div class="le">
+									<p><img src="static/images/index/butt_organ_08.jpg" alt="中国银行"></p>
+									<p><span>放款机构</span></p>
+								</div>
+								<div class="ri">
+									<p class="f77"><strong>160</strong>万</p>
+									<p>成功放款金额</p>
+								</div>
+							</div>
+							<div class="desc">贷款人：张先生<br>企业资质：企业经营2年，对公对私流水共100万，有一套房子，有负债。</div>
+						</div>
+					</div>
+				</div>
+				<div class="cases_prev"></div>
+				<div class="cases_next"></div>
+				<div class="succ_cases_go"><span>他们已经成功贷款， 你还在等什么！</span><a href="#">我要贷款</a></div>
+			</div>
+			<!--对接结构-->
+			<div class="butt_organ">
+				<h2 class="tit"><strong>对接机构</strong></h2>
+				<div class="butt_organ_s fn_clear"><img src="static/images/index/butt_organ_01.jpg" alt=""><img src="static/images/index/butt_organ_02.jpg" alt=""><img src="static/images/index/butt_organ_03.jpg" alt=""><img src="static/images/index/butt_organ_04.jpg" alt=""><img src="static/images/index/butt_organ_05.jpg" alt=""><img src="static/images/index/butt_organ_06.jpg" alt=""><img src="static/images/index/butt_organ_07.jpg" alt=""><img src="static/images/index/butt_organ_08.jpg" alt=""><img src="static/images/index/butt_organ_09.jpg" alt=""><img src="static/images/index/butt_organ_10.jpg" alt=""><img src="static/images/index/butt_organ_11.jpg" alt=""><img src="static/images/index/butt_organ_12.jpg" alt=""></div>
+			</div>
+		</div>
+	</div>
+	
+	<!--底部footer-->
+	<div class="new_footer">
+		<div class="footer_cor"><a href="#">关于我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">成功案例</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">合作平台</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">帮助中心</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">联系我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">免责声明</a></div>
+		<div class="footer_copy">
+				<p>&copy; 2015 Youboy 粤B2-20120239 粤ICP备09180448号<img src="static/images/index/footer_copy_zx.jpg" width="15" height="18">互联网药品信息服务资格证书</p>
+				<div class="sup_imgs">
+				<a href="https://ss.knet.cn/verifyseal.dll?sn=e13073044010041807hcer000000&ct=df&a=1&pa=0.9170622944366187" target="_blank"><span class="copy_ico_1"></span>可信网站身份<img src="static/images/index/footer_sup_img_01.jpg" width="93" height="34"></a>
+				<a href="http://www.ghwsx.gov.cn/gholportal/homenew.aspx" target="_blank"><span class="copy_ico_2"></span>广货网上行<img src="static/images/index/footer_sup_img_02.jpg" width="93" height="34"></a>
+				<a href="http://services.youboy.com/" target="_blank"><span class="copy_ico_3"></span>消费维权服务站<img src="static/images/index/footer_sup_img_03.jpg" width="93" height="34"></a>
+				<a href="http://www.eccsp.org/sitecn/aspx/certificationD.aspx?pid=1597" target="_blank"><span class="copy_ico_4"></span>诚信电商认证<img src="static/images/index/footer_sup_img_04.jpg" width="93" height="34"></a>
+				<a href="http://www.ccredit.cn/zx/zx_website.aspx?id=242" target="_blank"><span class="copy_ico_5"></span>公允有信<img src="static/images/index/footer_sup_img_05.jpg" width="93" height="34"></a>
+				<a href="http://netadreg.gzaic.gov.cn/ntmm/WebSear/WebLogoPub.aspx?logo=440108108012011051100130" target="_blank"><span class="copy_ico_6"></span>工商网监<img src="static/images/index/footer_sup_img_06.jpg" width="93" height="34"></a></div>
+			</div>
+	</div>
+	
+	<!--弹出 完善贷款信息框-->
+	<div class="mask"></div>
+	<div class="s_apply_box">
+		<a class="close" href="javascript:;" title="关闭" onclick="sy.hideSapply()"></a>
+		<h1>恭喜您，成功提交申请信息</h1>
+		<p>填写一下信息，继续完成您的贷款申请，以便顾问为您提供最好的贷款撮合服务！</p>
+		<h2 class="nav_c"><a class="cur" href="javascript:;">企业贷款<em></em></a><a href="javascript:;">个人贷款<em></em></a></h2>
+		<div class="cor_loan_f c_div">
+			<form>
+				<ul>
+					<li class="fn_clear">
+						<div class="li_l">公司营业执照年限：</div>
+						<div class="li_r zIndex3">
+							<div class="li_r_face"><span>请选择</span><a href="javascript:;"></a></div>
+							<div class="li_r_show"><span class="sel">请选择</span><span>1年以下</span><span>1-3年</span><span>3-5年</span><span>5年以上</span></div>
+						</div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">有房情况：</div>
+						<div class="li_r zIndex2">
+							<div class="li_r_face"><span>请选择</span><a href="javascript:;"></a></div>
+							<div class="li_r_show"><span class="sel">请选择</span><span>无</span><span>有房</span><span>房已抵押</span><span>房在按揭</span></div>
+						</div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">有车情况：</div>
+						<div class="li_r zIndex1">
+							<div class="li_r_face"><span>请选择</span><a href="javascript:;"></a></div>
+							<div class="li_r_show"><span class="sel">请选择</span><span>无</span><span>有车</span><span>车已抵押</span><span>车在按揭</span></div>
+						</div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">银行流水情况：</div>
+						<div class="li_r"><label><input type="radio" name="bank_radio">0-50万</label><label><input type="radio" name="bank_radio">51-150万</label><label><input type="radio" name="bank_radio">150-300万</label><label><input type="radio" name="bank_radio">300万以上</label></div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">信用记录情况：</div>
+						<div class="li_r"><label><input type="radio" name="cre_radio">无信用记录</label><label><input type="radio" name="cre_radio">信用记录良好</label><label><input type="radio" name="cre_radio">少数逾期</label><label><input type="radio" name="cre_radio">频繁逾期</label></div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">&nbsp;</div>
+						<div class="li_r"><input class="subBtn" type="button" value="完成" onclick="sy.apply_ok()"></div>
+					</li>
+				</ul>
+			</form>
+		</div>
+		<div class="cor_loan_f p_div">
+			<form>
+				<ul>
+					<li class="fn_clear">
+						<div class="li_l">个人薪资：</div>
+						<div class="li_r"><label><input type="radio" name="p_radio">2K-3K</label><label><input type="radio" name="p_radio">3K-8K</label><label><input type="radio" name="p_radio">8K-1.5W</label><label><input type="radio" name="p_radio">1.5W以上</label></div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">有房情况：</div>
+						<div class="li_r"><label><input type="radio" name="h_radio">无</label><label><input type="radio" name="h_radio">有房</label><label><input type="radio" name="h_radio">房已抵押</label><label><input type="radio" name="h_radio">房在按揭</label></div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">有车情况：</div>
+						<div class="li_r"><label><input type="radio" name="c_radio">无</label><label><input type="radio" name="c_radio">有车</label><label><input type="radio" name="c_radio">车已抵押</label><label><input type="radio" name="c_radio">车在按揭</label></div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">信用记录：</div>
+						<div class="li_r"><label><input type="radio" name="x_radio">无信用记录</label><label><input type="radio" name="x_radio">信用记录良好</label><label><input type="radio" name="x_radio">少数逾期</label><label><input type="radio" name="x_radio">长期多次逾期</label></div>
+					</li>
+					<li class="fn_clear">
+						<div class="li_l">&nbsp;</div>
+						<div class="li_r"><input class="subBtn" type="button" value="完成" onclick="sy.apply_ok()"></div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+	<!--贷款成功框-->
+	<div class="s_apply_ok">
+		<a class="close" href="javascript:;" title="关闭" onclick="sy.hideSapply()"></a>
+		<div class="txt">
+			<h1>您的贷款申请及信息成功提交</h1>
+			<p>请保持手机通畅，一呼百应顾问会与您及时联系，确认贷款需求</p>
+			<p>欢迎加入一呼百应，为了您的账户安全，请<a href="#">修改密码</a></p>
+			<p class="p_a">你可以 <a class="enter_p" href="#">进入个人中心</a> 或 <a class="a_close" href="javascript:;" onclick="sy.hideSapply()">关闭窗口</a></p>
+		</div>
+	</div>
+	<!--右侧固定-->
+	<div class="fixed_rb">
+		<ul>
+			<li class="li_zx"><a href="javascript:;" title="在线咨询"><em class="zx_icon"></em></a>
+				<div class="fade_div">在线咨询</div>
+			</li>
+			<li class="li_wx"><a href="javascript:;" title="关注一呼百应金融微信"><em class="wx_icon"></em></a>
+				<div class="fade_div"><img src="static/images/index/n_weixin.jpg" width="110" height="110" alt="一呼百应金融微信">一呼百应金融平台</div>
+			</li>
+			<li class="li_cs"><a href="javascript:;" title="贷款测算器"><em class="cs_icon"></em></a>
+				<div class="fade_div">贷款测算器</div>
+			</li>
+			<li class="li_up"><a href="javascript:;" title="返回顶部"><em class="up_icon"></em></a>
+				<div class="fade_div">返回顶部</div>
+			</li>
+		</ul>
+	</div>
+
+</body>
+</html>
