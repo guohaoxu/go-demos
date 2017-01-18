@@ -11,4 +11,5 @@ func main() {
   mux.Handle("/public", fs)
   log.Println("Listening...")
   http.ListenAndServe(":8080", mux)
+
 }
