@@ -1,12 +1,16 @@
 {{define "base"}}
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{{template "head" .}}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    {{template "head" .}}
   </head>
   <body>
     {{template "body" .}}
+    <script src="/public/js/jquery.min.js"></script>
   </body>
 </html>
 {{end}}

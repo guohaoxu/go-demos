@@ -1,32 +1,28 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    {{define "head"}}<title>Index</title>{{end}}
-  </head>
-  <body>
-    {{define "body"}}
-    <h1>Notes List</h1>
-    <p><a href="/notes/add">Add Note</a></p>
-    <div>
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Created On</th>
-          <th>Actions</th>
-        </tr>
-        {{range $key, $value := .}}
-        <tr>
-          <td>{{$value.Title}}</td>
-          <td>{{$value.Description}}</td>
-          <td>{{$value.CreatedOn}}</td>
-          <td><a href="/notes/edit/{{$key}}">Edit</a></td>
-          <td><a href="/notes/delete/{{$key}}">Delete</a></td>
-        </tr>
-        {{end}}
-      </table>
-    </div>
-    {end}
-  </body>
-</html>
+{{define "head"}}
+<title>Title</title>
+{{end}}
+{{define "body"}}
+<h1>Notes List</h1>
+<p><a href="/notes/add">Add Note</a></p>
+<div class="">
+  <table border="1">
+    <tr>
+      <th>title</th>
+      <th>Description</th>
+      <th>CreatedOn</th>
+      <th>Actions</th>
+    </tr>
+    {{range $key, $value := .}}
+    <tr>
+      <td>{{$value.Title}}</td>
+      <td>{{$value.Description}}</td>
+      <td>{{$value.CreatedOn}}</td>
+      <td>
+        <a href="/notes/edit/{{$key}}">Edit</a>
+        <a href="/notes/delete/{{$key}}">Delete</a>
+      </td>
+    </tr>
+    {{end}}
+  </table>
+</div>
+{{end}}

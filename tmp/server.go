@@ -1,15 +1,15 @@
 package main
 
 import (
-  "fmt"
-  "net/http"
+	"fmt"
+	"net/http"
 )
 
 func main() {
-  fmt.Println("服务已开启，请访问本地3000端口...")
-  http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-    w.Header().Add("server", "Gogogo Server")
-    fmt.Fprintf(w, `
+	fmt.Println("服务已开启，请访问本地3000端口...")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("server", "Gogogo Server")
+		fmt.Fprintf(w, `
       <html>
         <head>
           <title>This is coded by go.</title>
@@ -20,10 +20,10 @@ func main() {
         </body>
       </html>
     `)
-  })
-  http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
-    w.Header().Add("server", "Gogogo Server")
-    fmt.Fprintf(w, `
+	})
+	http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("server", "Gogogo Server")
+		fmt.Fprintf(w, `
       <html>
         <head>
           <title>This is coded by go.</title>
@@ -34,9 +34,9 @@ func main() {
         </body>
       </html>
     `)
-  })
-  http.HandleFunc("/error", func(w http.ResponseWriter, r *http.Request) {
-    http.Error(w, "Something has gone wrong", 500)
-  })
-  http.ListenAndServe(":3000", nil)
+	})
+	http.HandleFunc("/error", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Something has gone wrong", 500)
+	})
+	http.ListenAndServe(":3000", nil)
 }

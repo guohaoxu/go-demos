@@ -21,9 +21,7 @@ func messHandlerFunc(w http.ResponseWriter, r *http.Request) {
 func main() {
 	mux := http.NewServeMux()
 
-	fs := http.FileServer(http.Dir("public"))
-
-	mux.Handle("/", fs)
+	mux.Handle("/", http.FileServer(http.Dir("public")))
 	mux.Handle("/welcome", &messageHandler{"Welcome to Go web development"})
 	mux.Handle("/message", http.HandlerFunc(messHandlerFunc))
 	mux.HandleFunc("/about", messHandlerFunc)
