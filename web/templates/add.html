@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    {{define "head"}}<title>Add Note</title>{{end}}
-  </head>
-  <body>
-    <h1>Add Note</h1>
-    <form class="" action="/notes/save" method="post">
-      <p>Title: <br> <input type="text" name="title" value=""></p>
-      <p>Description: <br> <textarea name="Description" rows="4" cols="50"></textarea></p>
-      <p><input type="submit" name="" value="submit"></p>
-    </form>
-    {{end}}
-  </body>
-</html>
+
+{{define "head"}}<title>Add Note</title>{{end}}
+{{define "body"}}
+<h1>Add Note</h1>
+<form class="" action="/notes/save" method="post">
+  <p>Title: <br> <input type="text" name="title" value=""></p>
+  <p>Description: <br> <textarea name="description" rows="4" cols="50"></textarea></p>
+  <p><input type="submit" name="" value="submit"></p>
+</form>
+{{end}}

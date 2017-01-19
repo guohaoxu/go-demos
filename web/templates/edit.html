@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    {{define "head"}}<title>Edit</title>{{end}}
-  </head>
-  <body>
-    {{define "body"}}
-    <h1>Edit Note</h1>
-    <form class="" action="/notes/update/{{.Id}}" method="post">
-      <p>Title:<br> <input type="text" name="title" value="{{.Note.Title}}"></p>
-      <p>Description:<br> <textarea name="Description" rows="4" cols="50">{{.Note.Description}}</textarea></p>
-      <p><input type="submit" name="" value="submit"></p>
-    </form>
-    {{end}}
-  </body>
-</html>
+{{define "head"}}<title>Edit Note</title>{{end}}
+{{define "body"}}
+<h1>Edit Note</h1>
+<form class="" action="/notes/update/{{.Id}}" method="post">
+  <p>Title:<br> <input type="text" name="title" value="{{.Note.Title}}"></p>
+  <p>Description:<br> <textarea name="description" rows="4" cols="50">{{.Note.Description}}</textarea></p>
+  <p><input type="submit" name="" value="submit"></p>
+</form>
+{{end}}
