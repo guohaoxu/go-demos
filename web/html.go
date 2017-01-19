@@ -48,8 +48,8 @@ func addNote(w http.ResponseWriter, r *http.Request) {
 func saveNote(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	title := r.PostFormValue("title")
-	desc := r.PostFormValue("description")
-	note := Note{title, desc, time.Now()}
+	description := r.PostFormValue("description")
+	note := Note{title, description, time.Now()}
 	id++
 	k := strconv.Itoa(id)
 	noteStore[k] = note
@@ -80,7 +80,7 @@ func updateNote(w http.ResponseWriter, r *http.Request) {
 	if note, ok := noteStore[k]; ok {
 		r.ParseForm()
 		noteToUpd.Title = r.PostFormValue("title")
-		noteToUpd.Description = r.PostFormValue("desciption")
+		noteToUpd.Description = r.PostFormValue("description")
 		noteToUpd.CreatedOn = note.CreatedOn
 		delete(noteStore, k)
 		noteStore[k] = noteToUpd
@@ -104,7 +104,7 @@ func deleteNote(w http.ResponseWriter, r *http.Request) {
 func main() {
 	r := mux.NewRouter().StrictSlash(false)
 
-	// r.Handle("/", http.FileServer(http.Dir("public")))
+	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	r.HandleFunc("/", getNotes)
 	r.HandleFunc("/notes/add", addNote)
 	r.HandleFunc("/notes/save", saveNote)
@@ -113,9 +113,9 @@ func main() {
 	r.HandleFunc("/notes/delete/{id}", deleteNote)
 
 	server := &http.Server{
-		Addr:    ":8000",
+		Addr:    ":3000",
 		Handler: r,
 	}
-	log.Println("Listening on port 8000...")
+	log.Println("Listening on port 3000...")
 	server.ListenAndServe()
 }

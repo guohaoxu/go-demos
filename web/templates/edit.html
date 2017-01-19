@@ -2,8 +2,14 @@
 {{define "body"}}
 <h1>Edit Note</h1>
 <form class="" action="/notes/update/{{.Id}}" method="post">
-  <p>Title:<br> <input type="text" name="title" value="{{.Note.Title}}"></p>
-  <p>Description:<br> <textarea name="description" rows="4" cols="50">{{.Note.Description}}</textarea></p>
-  <p><input type="submit" name="" value="submit"></p>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" name="title" class="form-control" value="{{.Note.Title}}">
+  </div>
+  <div class="form-group">
+    <label for="">Description:</label>
+    <textarea type="text" name="description" class="form-control">{{.Note.Description}}</textarea>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
 </form>
 {{end}}
