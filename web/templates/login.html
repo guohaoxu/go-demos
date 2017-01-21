@@ -1,0 +1,17 @@
+
+{{define "head"}}<title>Add Note</title>{{end}}
+{{define "body"}}
+<h1>Add Note</h1>
+<form class="" action="/users/add" method="post">
+  <div class="form-group">
+    <label for="">username:</label>
+    <input type="text" name="title" value="" class="form-control">
+    <p class="help-block"> </p>
+  </div>
+  <div class="form-group">
+    <label for="">password:</label>
+    <textarea type="text" name="description" class="form-control"></textarea>
+  </div>
+  <button type="submit" name="button" class="btn btn-default">Submit</button>
+</form>
+{{end}}
