@@ -1,13 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 )
 
 type Note struct {
@@ -19,11 +23,14 @@ type Note struct {
 var noteStore = make(map[string]Note)
 var id int = 0
 var templates = make(map[string]*template.Template)
+var store = sessions.NewCookieStore([]byte("somehashsaltsecret"))
 
 func init() {
 	templates["index"] = template.Must(template.ParseFiles("templates/index.html", "templates/base.html"))
 	templates["add"] = template.Must(template.ParseFiles("templates/add.html", "templates/base.html"))
 	templates["edit"] = template.Must(template.ParseFiles("templates/edit.html", "templates/base.html"))
+	templates["login"] = template.Must(template.ParseFiles("templates/login.html", "templates/base.html"))
+	templates["logup"] = template.Must(template.ParseFiles("templates/logup.html", "templates/base.html"))
 }
 
 func renderTemplate(w http.ResponseWriter, name string, template string, viewModel interface{}) {
@@ -37,8 +44,51 @@ func renderTemplate(w http.ResponseWriter, name string, template string, viewMod
 	}
 }
 
+func logup(w http.ResponseWriter, r *http.Request) {
+	renderTemplate(w, "logup", "base", nil)
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	renderTemplate(w, "login", "base", nil)
+}
+
+func logout(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "sessionId")
+	if err != nil {
+		panic(err)
+	}
+	session.Options = &sessions.Options{
+		MaxAge: -1,
+	}
+	session.Save(r, w)
+	fmt.Println("session:", session)
+	http.Redirect(w, r, "/", 302)
+}
+
+func addUser(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	username := r.PostFormValue("username")
+	session, err := store.Get(r, "sessionId")
+	if err != nil {
+		panic(err)
+	}
+	session.Values["username"] = username
+	session.Save(r, w)
+	http.Redirect(w, r, "/", 302)
+}
+
 func getNotes(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "index", "base", noteStore)
+	session, err := store.Get(r, "sessionId")
+	if err != nil {
+		panic(err)
+	}
+	type indexData struct {
+		Notes    map[string]Note
+		Username interface{}
+	}
+	username := session.Values["username"]
+	indexdata := indexData{noteStore, username}
+	renderTemplate(w, "index", "base", indexdata)
 }
 
 func addNote(w http.ResponseWriter, r *http.Request) {
@@ -101,16 +151,44 @@ func deleteNote(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", 302)
 }
 
-func main() {
-	r := mux.NewRouter()
+func iconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "./public/favicon.ico")
+}
 
-	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
-	r.HandleFunc("/", getNotes)
-	r.HandleFunc("/notes/add", addNote)
-	r.HandleFunc("/notes/save", saveNote)
-	r.HandleFunc("/notes/edit/{id}", editNote)
-	r.HandleFunc("/notes/update/{id}", updateNote)
-	r.HandleFunc("/notes/delete/{id}", deleteNote)
+func main() {
+	logFile, err := os.OpenFile("server.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		panic(err)
+	}
+
+	r := mux.NewRouter()
+	r.HandleFunc("/favicon.ico", iconHandler)
+
+	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", handlers.LoggingHandler(logFile, handlers.CompressHandler(http.FileServer(http.Dir("public"))))))
+
+	logupHandler := http.HandlerFunc(logup)
+	loginHandler := http.HandlerFunc(login)
+	addUserHandler := http.HandlerFunc(addUser)
+	getNotesHandler := http.HandlerFunc(getNotes)
+	addNoteHandler := http.HandlerFunc(addNote)
+	saveNoteHandler := http.HandlerFunc(saveNote)
+	editNoteHandler := http.HandlerFunc(editNote)
+	updateNoteHandler := http.HandlerFunc(updateNote)
+	deleteNoteHandler := http.HandlerFunc(deleteNote)
+
+	r.Handle("/logup", handlers.LoggingHandler(logFile, handlers.CompressHandler(logupHandler)))
+	r.Handle("/login", handlers.LoggingHandler(logFile, handlers.CompressHandler(loginHandler)))
+
+	r.Handle("/logout", http.HandlerFunc(logout))
+
+	r.Handle("/users/add", handlers.LoggingHandler(logFile, handlers.CompressHandler(addUserHandler)))
+
+	r.Handle("/", handlers.LoggingHandler(logFile, handlers.CompressHandler(getNotesHandler)))
+	r.Handle("/notes/add", handlers.LoggingHandler(logFile, handlers.CompressHandler(addNoteHandler)))
+	r.Handle("/notes/save", handlers.LoggingHandler(logFile, handlers.CompressHandler(saveNoteHandler)))
+	r.Handle("/notes/edit/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(editNoteHandler)))
+	r.Handle("/notes/update/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(updateNoteHandler)))
+	r.Handle("/notes/delete/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(deleteNoteHandler)))
 
 	server := &http.Server{
 		Addr:    ":3000",

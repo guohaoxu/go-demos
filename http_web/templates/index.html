@@ -1,7 +1,15 @@
 {{define "head"}}<title>Title</title>{{end}}
 {{define "body"}}
 <h1>Notes List</h1>
-<p><a class="btn btn-default" href="/notes/add" data-toggle="tooltip" data-placement="bottom" title="添加新Note"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Note</a></p>
+<p>
+{{if .Username}}
+  <a class="btn btn-default" href="/notes/add" data-toggle="tooltip" data-placement="bottom" title="添加新Note"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Note</a>
+  欢迎你，{{.Username}}
+  <a class="btn btn-default" href="/logout" data-toggle="tooltip" data-placement="bottom" title="注销"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> 注销</a>
+{{else}}
+<a class="btn btn-default" href="/login" data-toggle="tooltip" data-placement="bottom" title="登录"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 登录</a>
+{{end}}
+</p>
 <div class="table-responsive">
   <table class="table table-striped table-bordered">
     <tr>
@@ -10,7 +18,8 @@
       <th>CreatedOn</th>
       <th>Actions</th>
     </tr>
-    {{range $key, $value := .}}
+    {{if .Username}}
+    {{range $key, $value := .Notes}}
     <tr>
       <td>{{$value.Title}}</td>
       <td>{{$value.Description}}</td>
@@ -21,6 +30,17 @@
       </td>
     </tr>
     {{end}}
+    {{else}}
+    {{range $key, $value := .Notes}}
+    <tr>
+      <td>{{$value.Title}}</td>
+      <td>{{$value.Description}}</td>
+      <td>{{$value.CreatedOn}}</td>
+      <td></td>
+    </tr>
+    {{end}}
+    {{end}}
+
   </table>
 </div>
 {{end}}
