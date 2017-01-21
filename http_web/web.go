@@ -17,6 +17,7 @@ import (
 type Note struct {
 	Title       string
 	Description string
+	Author      interface{}
 	CreatedOn   time.Time
 }
 
@@ -87,6 +88,10 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 		Username interface{}
 	}
 	username := session.Values["username"]
+	fmt.Println(username, "---")
+	if username == nil {
+		username = ""
+	}
 	indexdata := indexData{noteStore, username}
 	renderTemplate(w, "index", "base", indexdata)
 }
@@ -99,7 +104,12 @@ func saveNote(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	title := r.PostFormValue("title")
 	description := r.PostFormValue("description")
-	note := Note{title, description, time.Now()}
+	session, err := store.Get(r, "sessionId")
+	if err != nil {
+		panic(err)
+	}
+	author := session.Values["username"]
+	note := Note{title, description, author, time.Now()}
 	id++
 	k := strconv.Itoa(id)
 	noteStore[k] = note
@@ -127,10 +137,16 @@ func updateNote(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	k := vars["id"]
 	var noteToUpd Note
+	session, err := store.Get(r, "sessionId")
+	if err != nil {
+		panic(err)
+	}
+	author := session.Values["username"]
 	if note, ok := noteStore[k]; ok {
 		r.ParseForm()
 		noteToUpd.Title = r.PostFormValue("title")
 		noteToUpd.Description = r.PostFormValue("description")
+		noteToUpd.Author = author
 		noteToUpd.CreatedOn = note.CreatedOn
 		delete(noteStore, k)
 		noteStore[k] = noteToUpd
