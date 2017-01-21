@@ -20,7 +20,7 @@ func about(w http.ResponseWriter, r *http.Request) {
 }
 
 func iconHandler(w http.ResponseWriter, r *http.Request) {
-	//
+	http.ServeFile(w, r, "./favicon.ico")
 }
 
 func main() {

@@ -25,17 +25,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome %s!", user)
 }
 
-func loginHandlerFunc(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintf(w, "just login")
-}
-
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", index)
-	mux.HandleFunc("/login", loginHandlerFunc)
 	n := negroni.Classic()
-	// n.Use(negroni.HandlerFunc(Authorize))
+	n.Use(negroni.HandlerFunc(Authorize))
 	n.UseHandler(mux)
 	n.Run(":8080")
 }

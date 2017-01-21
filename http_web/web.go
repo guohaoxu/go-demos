@@ -102,7 +102,7 @@ func deleteNote(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	r := mux.NewRouter().StrictSlash(false)
+	r := mux.NewRouter()
 
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	r.HandleFunc("/", getNotes)
