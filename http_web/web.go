@@ -88,7 +88,6 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 		Username interface{}
 	}
 	username := session.Values["username"]
-	fmt.Println(username, "---")
 	if username == nil {
 		username = ""
 	}
