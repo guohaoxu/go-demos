@@ -245,7 +245,7 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 		Title       string
 		Description string
 		Author      interface{}
-		CreatedOn   time.Time
+		CreatedOn   string
 	}
 	type indexData struct {
 		Notes    []newNote
@@ -253,12 +253,13 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 	}
 	var newNotes []newNote
 	for i := 0; i < len(notes); i++ {
+		newTime := strings.Join(strings.Split(notes[i].CreatedOn.String(), "")[0:20], "")
 		newNotes = append(newNotes, newNote{
 			Uid:         notes[i].Id.Hex(),
 			Title:       notes[i].Title,
 			Description: notes[i].Description,
 			Author:      notes[i].Author,
-			CreatedOn:   notes[i].CreatedOn,
+			CreatedOn:   newTime,
 		})
 	}
 	indexdata := indexData{newNotes, username}
