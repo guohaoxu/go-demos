@@ -2,7 +2,7 @@
 {{define "head"}}<title>Add Note</title>{{end}}
 {{define "body"}}
 <h1>Login</h1>
-<form class="" action="/users/add" method="post">
+<form class="loginForm" action="/users/auth" method="post">
   <div class="form-group">
     <label for="">username:</label>
     <input type="text" name="username" value="" class="form-control">
@@ -11,6 +11,7 @@
     <label for="">password:</label>
     <input type="password" name="password" value="" class="form-control">
   </div>
+  <p>{{.}}</p>
   <button type="submit" name="button" class="btn btn-default">Submit</button>
 </form>
 {{end}}
