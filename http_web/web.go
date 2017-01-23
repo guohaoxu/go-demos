@@ -6,19 +6,56 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
+
+	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 )
 
+// type Note struct {
+// 	Title       string
+// 	Description string
+// 	Author      interface{}
+// 	CreatedOn   time.Time
+// }
+
+var session *mgo.Session
+
+type User struct {
+	id       bson.ObjectId `bson:"_id,omitempty"`
+	Name     string
+	Password string
+}
+
 type Note struct {
+	id          bson.ObjectId `json:"_id,omitempty"`
 	Title       string
 	Description string
 	Author      interface{}
 	CreatedOn   time.Time
+}
+
+type DataStore struct {
+	Session *mgo.Session
+}
+
+func (d *DataStore) Close() {
+	d.Session.Close()
+}
+
+func (d *DataStore) C(name string) *mgo.Collection {
+	return d.Session.DB("notedb").C(name)
+}
+
+func NewDataStore() *DataStore {
+	ds := &DataStore{
+		Session: session.Copy(),
+	}
+	return ds
 }
 
 var noteStore = make(map[string]Note)
@@ -66,9 +103,26 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", 302)
 }
 
+// 注册新用户
 func addUser(w http.ResponseWriter, r *http.Request) {
+	ds := NewDataStore()
+	defer ds.Close()
+	c := ds.C("users")
+
 	r.ParseForm()
 	username := r.PostFormValue("username")
+	password := r.PostFormValue("password")
+
+	user := User{
+		bson.NewObjectId(),
+		username,
+		password,
+	}
+	errs := c.Insert(user)
+	if errs != nil {
+		panic(errs)
+	}
+	//
 	session, err := store.Get(r, "sessionId")
 	if err != nil {
 		panic(err)
@@ -95,82 +149,89 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "index", "base", indexdata)
 }
 
-func addNote(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "add", "base", nil)
-}
+// func addNote(w http.ResponseWriter, r *http.Request) {
+// 	renderTemplate(w, "add", "base", nil)
+// }
 
-func saveNote(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	title := r.PostFormValue("title")
-	description := r.PostFormValue("description")
-	session, err := store.Get(r, "sessionId")
-	if err != nil {
-		panic(err)
-	}
-	author := session.Values["username"]
-	note := Note{title, description, author, time.Now()}
-	id++
-	k := strconv.Itoa(id)
-	noteStore[k] = note
-	http.Redirect(w, r, "/", 302)
-}
+// func saveNote(w http.ResponseWriter, r *http.Request) {
+// 	r.ParseForm()
+// 	title := r.PostFormValue("title")
+// 	description := r.PostFormValue("description")
+// 	session, err := store.Get(r, "sessionId")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	author := session.Values["username"]
+// 	note := Note{title, description, author, time.Now()}
+// 	id++
+// 	k := strconv.Itoa(id)
+// 	noteStore[k] = note
+// 	http.Redirect(w, r, "/", 302)
+// }
+//
+// type EditNote struct {
+// 	Note
+// 	Id string
+// }
 
-type EditNote struct {
-	Note
-	Id string
-}
-
-func editNote(w http.ResponseWriter, r *http.Request) {
-	var viewModel EditNote
-	vars := mux.Vars(r)
-	k := vars["id"]
-	if note, ok := noteStore[k]; ok {
-		viewModel = EditNote{note, k}
-	} else {
-		http.Error(w, "Could not find the resource to edit.", http.StatusBadRequest)
-	}
-	renderTemplate(w, "edit", "base", viewModel)
-}
-
-func updateNote(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	k := vars["id"]
-	var noteToUpd Note
-	session, err := store.Get(r, "sessionId")
-	if err != nil {
-		panic(err)
-	}
-	author := session.Values["username"]
-	if note, ok := noteStore[k]; ok {
-		r.ParseForm()
-		noteToUpd.Title = r.PostFormValue("title")
-		noteToUpd.Description = r.PostFormValue("description")
-		noteToUpd.Author = author
-		noteToUpd.CreatedOn = note.CreatedOn
-		delete(noteStore, k)
-		noteStore[k] = noteToUpd
-	} else {
-		http.Error(w, "Could not find the resource to update.", http.StatusBadRequest)
-	}
-	http.Redirect(w, r, "/", 302)
-}
-
-func deleteNote(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	k := vars["id"]
-	if _, ok := noteStore[k]; ok {
-		delete(noteStore, k)
-	} else {
-		http.Error(w, "Could not find the resource to delete.", http.StatusBadRequest)
-	}
-	http.Redirect(w, r, "/", 302)
-}
+// func editNote(w http.ResponseWriter, r *http.Request) {
+// 	var viewModel EditNote
+// 	vars := mux.Vars(r)
+// 	k := vars["id"]
+// 	if note, ok := noteStore[k]; ok {
+// 		viewModel = EditNote{note, k}
+// 	} else {
+// 		http.Error(w, "Could not find the resource to edit.", http.StatusBadRequest)
+// 	}
+// 	renderTemplate(w, "edit", "base", viewModel)
+// }
+//
+// func updateNote(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	k := vars["id"]
+// 	var noteToUpd Note
+// 	session, err := store.Get(r, "sessionId")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	author := session.Values["username"]
+// 	if note, ok := noteStore[k]; ok {
+// 		r.ParseForm()
+// 		noteToUpd.Title = r.PostFormValue("title")
+// 		noteToUpd.Description = r.PostFormValue("description")
+// 		noteToUpd.Author = author
+// 		noteToUpd.CreatedOn = note.CreatedOn
+// 		delete(noteStore, k)
+// 		noteStore[k] = noteToUpd
+// 	} else {
+// 		http.Error(w, "Could not find the resource to update.", http.StatusBadRequest)
+// 	}
+// 	http.Redirect(w, r, "/", 302)
+// }
+//
+// func deleteNote(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	k := vars["id"]
+// 	if _, ok := noteStore[k]; ok {
+// 		delete(noteStore, k)
+// 	} else {
+// 		http.Error(w, "Could not find the resource to delete.", http.StatusBadRequest)
+// 	}
+// 	http.Redirect(w, r, "/", 302)
+// }
 
 func iconHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./public/favicon.ico")
 }
 
 func main() {
+	// connect Database
+	var err error
+	session, err = mgo.Dial("localhost")
+	if err != nil {
+		panic(err)
+	}
+
 	logFile, err := os.OpenFile("server.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		panic(err)
@@ -185,11 +246,11 @@ func main() {
 	loginHandler := http.HandlerFunc(login)
 	addUserHandler := http.HandlerFunc(addUser)
 	getNotesHandler := http.HandlerFunc(getNotes)
-	addNoteHandler := http.HandlerFunc(addNote)
-	saveNoteHandler := http.HandlerFunc(saveNote)
-	editNoteHandler := http.HandlerFunc(editNote)
-	updateNoteHandler := http.HandlerFunc(updateNote)
-	deleteNoteHandler := http.HandlerFunc(deleteNote)
+	// addNoteHandler := http.HandlerFunc(addNote)
+	// saveNoteHandler := http.HandlerFunc(saveNote)
+	// editNoteHandler := http.HandlerFunc(editNote)
+	// updateNoteHandler := http.HandlerFunc(updateNote)
+	// deleteNoteHandler := http.HandlerFunc(deleteNote)
 
 	r.Handle("/logup", handlers.LoggingHandler(logFile, handlers.CompressHandler(logupHandler)))
 	r.Handle("/login", handlers.LoggingHandler(logFile, handlers.CompressHandler(loginHandler)))
@@ -199,11 +260,11 @@ func main() {
 	r.Handle("/users/add", handlers.LoggingHandler(logFile, handlers.CompressHandler(addUserHandler)))
 
 	r.Handle("/", handlers.LoggingHandler(logFile, handlers.CompressHandler(getNotesHandler)))
-	r.Handle("/notes/add", handlers.LoggingHandler(logFile, handlers.CompressHandler(addNoteHandler)))
-	r.Handle("/notes/save", handlers.LoggingHandler(logFile, handlers.CompressHandler(saveNoteHandler)))
-	r.Handle("/notes/edit/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(editNoteHandler)))
-	r.Handle("/notes/update/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(updateNoteHandler)))
-	r.Handle("/notes/delete/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(deleteNoteHandler)))
+	// r.Handle("/notes/add", handlers.LoggingHandler(logFile, handlers.CompressHandler(addNoteHandler)))
+	// r.Handle("/notes/save", handlers.LoggingHandler(logFile, handlers.CompressHandler(saveNoteHandler)))
+	// r.Handle("/notes/edit/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(editNoteHandler)))
+	// r.Handle("/notes/update/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(updateNoteHandler)))
+	// r.Handle("/notes/delete/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(deleteNoteHandler)))
 
 	server := &http.Server{
 		Addr:    ":3000",

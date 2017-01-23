@@ -84,6 +84,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	r := mux.NewRouter()
 	r.HandleFunc("/api/categories", GetCategories).Methods("Get")
 	r.HandleFunc("/api/categories", PostCategory).Methods("POST")

@@ -44,6 +44,14 @@ func main() {
 	}
 	err = c.Insert(&Category{
 		bson.NewObjectId(), "R & D", "R & D Tasks"}, &Category{bson.NewObjectId(), "Project", "Project Tasks"})
+	docM := map[string]string{
+		"name":        "Open Source",
+		"description": "Tasks for open source pojects",
+	}
+	err = c.Insert(docM)
+	if err != nil {
+		panic(err)
+	}
 	docD := bson.D{
 		{"name", "Projectsssssssss"},
 		{"description", "Project Tasksssssssssss"},
@@ -87,8 +95,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Indexes----------------------------------
 	c.RemoveAll(nil)
+	// Indexes----------------------------------
 	index := mgo.Index{
 		Key:        []string{"name"},
 		Unique:     true,
