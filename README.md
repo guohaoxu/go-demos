@@ -1,4 +1,4 @@
-# godemos:sweat_smile:
+# go-demos:sweat_smile:
 :cn::airplane::airplane::airplane:
 
 `cd http_web && go run web.go`
