@@ -20,6 +20,7 @@
       <th>CreatedOn</th>
       <th>Actions</th>
     </tr>
+    {{if .Notes}}
     {{$current := .Username}}
     {{range $key, $value := .Notes}}
     <tr>
@@ -35,6 +36,12 @@
       </td>
     </tr>
     {{end}}
+    {{else}}
+    <tr>
+      <td colspan="5" class="text-center" style="padding: 20px 0px;"><strong>No any notes.</strong></td>
+    </tr>
+    {{end}}
+
   </table>
 </div>
 {{end}}

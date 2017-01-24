@@ -3,7 +3,7 @@ package main
 
 import (
 	"fmt"
-	"go-demos/calcproj/simplemath"
+	. "go-demos/calcproj/simplemath"
 	"os"
 	"strconv"
 )
@@ -31,7 +31,7 @@ func main() {
 			fmt.Println("USAGE: calc add <integer1><integer2>")
 			return
 		}
-		ret := simplemath.Add(v1, v2)
+		ret := Add(v1, v2)
 		fmt.Println("Result: ", ret)
 	case "sqrt":
 		if len(args) != 3 {
@@ -43,7 +43,7 @@ func main() {
 			fmt.Println("USAGE: calc sqrt <integer>")
 			return
 		}
-		ret := simplemath.Sqrt(v)
+		ret := Sqrt(v)
 		fmt.Println("Result: ", ret)
 	default:
 		Usage()
