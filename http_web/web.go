@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
@@ -481,16 +482,44 @@ func iconHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// connect Database
-	var err error
-	session, err = mgo.Dial("localhost")
+	// 获取配置文件
+	type Config struct {
+		Port  string `json:"port"`
+		Dburl string `json:"dburl"`
+	}
+	var configJson, config Config
+	file, errr := os.Open("config.json")
+	if errr != nil {
+		panic(errr)
+	}
+	err := json.NewDecoder(file).Decode(&configJson)
 	if err != nil {
 		panic(err)
 	}
+	portEnv := os.Getenv("PORT")
+	dburlEnv := os.Getenv("DBURL")
+	if portEnv == "" {
+		config.Port = configJson.Port
+	} else {
+		config.Port = portEnv
+	}
+	if dburlEnv == "" {
+		config.Dburl = configJson.Dburl
+	} else {
+		config.Dburl = dburlEnv
+	}
 
-	logFile, err := os.OpenFile("server.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	// connect Database
+	var err3 error
+	session, err3 = mgo.Dial(config.Dburl)
+
+	if err3 != nil {
+		panic(err3)
+	}
+
+	logFile, err2 := os.OpenFile("server.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
-		panic(err)
+		panic(err2)
 	}
 
 	r := mux.NewRouter()
@@ -526,9 +555,9 @@ func main() {
 	r.Handle("/notes/delete/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(deleteNoteHandler)))
 
 	server := &http.Server{
-		Addr:    ":3000",
+		Addr:    "localhost:" + config.Port,
 		Handler: r,
 	}
-	log.Println("Listening on port 3000...")
+	log.Println("Listening on port ", config.Port, "...")
 	server.ListenAndServe()
 }
