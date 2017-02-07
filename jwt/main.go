@@ -6,12 +6,16 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 )
 
+/**
+ * Generate RSA keys
+ * openssl genrsa -out app.rsa 1024
+ * openssl rsa -in app.rsa -pubout > app.rsa.pub
+ */
 const (
 	privKeyPath = "keys/app.rsa"
 	pubKeyPath  = "keys/app.rsa.pub"
@@ -24,6 +28,16 @@ var verifyKey2, signKey2 interface{}
 type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+type Response struct {
+	Text string `json:"text"`
+}
+type Token struct {
+	Token string `json:"token"`
+}
+type MyCustomClaims struct {
+	Username string `json:"username"`
+	jwt.StandardClaims
 }
 
 func init() {
@@ -61,16 +75,27 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "用户名或密码错误！")
 		return
 	}
-	t := jwt.New(jwt.GetSigningMethod("RS256"))
-	jwt.MapClaims["iss"] = "admin"
-	jwt.MapClaims["CustomUserInfo"] = struct {
-		Name string
-		Role string
-	}{user.Username, "Member"}
+	claims := MyCustomClaims{
+		user.Username,
+		jwt.StandardClaims{
+			Issuer: "admin",
+		},
+	}
+	fmt.Println(claims.Username, "claims.Username")
+	fmt.Println(claims.StandardClaims.Audience, "Audience")
+	fmt.Println(claims.StandardClaims.ExpiresAt, "ExpiresAt")
+	fmt.Println(claims.StandardClaims.Id, "Id")
+	fmt.Println(claims.StandardClaims.IssuedAt, "IssuedAt")
+	fmt.Println(claims.StandardClaims.Issuer, "Issuer")
+	fmt.Println(claims.StandardClaims.NotBefore, "NotBefore")
+	fmt.Println(claims.StandardClaims.Subject, "Subject")
+	fmt.Println("----------------------------------------------")
 
-	jwt.MapClaims["exp"] = time.Now().Add(time.Minute * 20).Unix()
+	t := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
 	tokenString, err := t.SignedString(signKey2)
+
+	fmt.Println(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, "Sorry, error while Signing Token!")
@@ -82,45 +107,48 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func authHandler(w http.ResponseWriter, r *http.Request) {
-	token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
-		return verifyKey, nil
+	// Authorization Bearer AccessToken
+	authString := r.Header.Get("Authorization")
+	tokenString := authString[7:len(authString)]
+	fmt.Println(tokenString, "+++")
+	t, _ := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return verifyKey2, nil
 	})
-	if err != nil {
-		switch err.(type) {
-		case *jwt.ValidationError:
-			vErr := err.(*jwt.ValidationError)
-			switch vErr.Errors {
-			case jwt.ValidationErrorExpired:
-				w.WriteHeader(http.StatusUnauthorized)
-				fmt.Fprintln(w, "Token Expired, get a new one.")
-				return
-			default:
-				w.WriteHeader(http.StatusInternalServerError)
-				fmt.Fprintf(w, "Error while Parsing Token!")
-				log.Printf("ValidationError error: %+v\n", vErr.Errirs)
-				return
-			}
-		default:
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "Error while Parsing Token!")
-			log.Printf("Token parse error:%v\n", err)
-			return
+	if t.Valid {
+		if claims, ok := t.Claims.(*MyCustomClaims); ok {
+			fmt.Println(claims.Username, " ---")
+			fmt.Println(claims.StandardClaims.ExpiresAt, " ---")
+			fmt.Println(claims.StandardClaims.Issuer, " ---")
+			response := Response{"Authorized to the system"}
+			jsonResponse(response, w)
 		}
-	}
-	if token.Valid {
-		response := Response{"Authorized to the system"}
-		jsonResponse(response, w)
 	} else {
 		response := Response{"Invalid token"}
 		jsonResponse(response, w)
 	}
-}
 
-type Response struct {
-	Text string `json:"text"`
-}
-type Token struct {
-	Token string `json:"token"`
+	// if err != nil {
+	// 	switch err.(type) {
+	// 	case *jwt.ValidationError:
+	// 		vErr := err.(*jwt.ValidationError)
+	// 		switch vErr.Errors {
+	// 		case jwt.ValidationErrorExpired:
+	// 			w.WriteHeader(http.StatusUnauthorized)
+	// 			fmt.Fprintln(w, "Token Expired, get a new one.")
+	// 			return
+	// 		default:
+	// 			w.WriteHeader(http.StatusInternalServerError)
+	// 			fmt.Fprintf(w, "Error while Parsing Token!")
+	// 			log.Printf("ValidationError error: %+v\n", vErr.Errirs)
+	// 			return
+	// 		}
+	// 	default:
+	// 		w.WriteHeader(http.StatusInternalServerError)
+	// 		fmt.Fprintf(w, "Error while Parsing Token!")
+	// 		log.Printf("Token parse error:%v\n", err)
+	// 		return
+	// 	}
+	// }
 }
 
 func jsonResponse(response interface{}, w http.ResponseWriter) {
@@ -139,7 +167,7 @@ func main() {
 	r.HandleFunc("/login", loginHandler).Methods("POST")
 	r.HandleFunc("/auth", authHandler).Methods("POST")
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8000",
 		Handler: r,
 	}
 	log.Println("Listening...")
