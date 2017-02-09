@@ -489,6 +489,7 @@ func main() {
 	}
 	var configJson, config Config
 	file, errr := os.Open("config.json")
+	defer file.Close()
 	if errr != nil {
 		panic(errr)
 	}
