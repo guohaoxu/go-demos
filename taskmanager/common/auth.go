@@ -11,7 +11,7 @@ var (
 	verifyKey, signKey []byte
 )
 
-func initKey() {
+func initKeys() {
 	var err error
 	signKey, err = ioutil.ReadFile(privKeyPath)
 	if err != nil {
@@ -22,4 +22,9 @@ func initKey() {
 		log.Fatalf("[initKeys]: %s\n", err)
 		panic(err)
 	}
+}
+
+// Generate JWT token
+func GenerateJWT(name, role string) (string, error) {
+
 }

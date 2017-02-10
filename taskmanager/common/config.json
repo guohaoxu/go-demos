@@ -1,0 +1,7 @@
+{
+  "Server": "localhost:3000",
+  "MongoDBHost": "localhost",
+  "DBUSer": "",
+  "DBPwd": "",
+  "Database": "taskdb"
+}
