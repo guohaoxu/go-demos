@@ -1,6 +1,12 @@
 package common
 
-import "log"
+import (
+	"log"
+	"net/http"
+	"time"
+
+	jwt "github.com/dgrijalva/jwt-go"
+)
 
 const (
 	privKeyPath = "keys/app.rsa"
@@ -26,5 +32,33 @@ func initKeys() {
 
 // Generate JWT token
 func GenerateJWT(name, role string) (string, error) {
+	t := jwt.New(jwt.GetSigningMethod("RS256"))
+	t.Claims["iss"] = "admin"
+	t.Claims["UserInfo"] = struct {
+		Name, role string
+	}{name, role}
+	t.Claims["exp"] = time.Now().Add(time.Minute * 20).Unix()
+	tokenString, err := t.SignedString(signKey)
+	if err != nil {
+		return "", err
+	}
+	return tokenString, nil
+}
 
+// Middleware for validating JWT token
+func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
+		return verifyKey, nil
+	})
+	if err != nil {
+		switch err.(type) {
+		case *jwt.ValidationError:
+			//
+		}
+	}
+	if token.Valid {
+		next(w, r)
+	} else {
+		DisplayAppError(w, err, "Invalid Access Token", 401)
+	}
 }
