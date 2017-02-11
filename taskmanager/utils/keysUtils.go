@@ -1,4 +1,4 @@
-package common
+package utils
 
 import (
 	"log"
@@ -17,7 +17,7 @@ var (
 	verifyKey, signKey []byte
 )
 
-func initKeys() {
+func InitKeys() {
 	var err error
 	signKey, err = ioutil.ReadFile(privKeyPath)
 	if err != nil {

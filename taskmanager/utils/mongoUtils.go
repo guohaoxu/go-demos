@@ -1,4 +1,4 @@
-package common
+package utils
 
 import (
 	"log"
@@ -25,7 +25,7 @@ func GetSession() *mgo.Session {
 	return session
 }
 
-func createDbSession() {
+func CreateDbSession() {
 	var err error
 	session, err = mgo.DialWithInfo(*mgo.DialInfo{
 		Addrs:    []string{AppConfig.MongoDBHost},
@@ -34,11 +34,11 @@ func createDbSession() {
 		Timeout:  60 * time.Second,
 	})
 	if err != nil {
-		log.Fatalf("[creteDbSession]: %s\n", err)
+		log.Fatalf("[CreteDbSession]: %s\n", err)
 	}
 }
 
-func addIndexes() {
+func AddIndexes() {
 	var err error
 	userIndex := mgo.Index{
 		Key:        []string{"email"},
@@ -66,14 +66,14 @@ func addIndexes() {
 	noteCol := session.DB(AppConfig.Database).C("notes")
 	err = userCol.EnsureIndex(userIndex)
 	if err != nil {
-		log.Fatalf("[addIndexes]: %s\n", err)
+		log.Fatalf("[AddIndexes]: %s\n", err)
 	}
 	err = taskCol.EnsureIndex(taskIndex)
 	if err != nil {
-		log.Fatalf("[addIndexes]: %s\n", err)
+		log.Fatalf("[AddIndexes]: %s\n", err)
 	}
 	err = noteCol.EnsureIndex(noteIndex)
 	if err != nil {
-		log.Fatalf("[addIndexes]: %s\n", err)
+		log.Fatalf("[AddIndexes]: %s\n", err)
 	}
 }

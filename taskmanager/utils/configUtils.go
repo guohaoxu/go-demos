@@ -1,4 +1,4 @@
-package common
+package utils
 
 import (
 	"encoding/json"
@@ -12,11 +12,7 @@ type configuration struct {
 
 var AppConfig configuration
 
-func initConfig() {
-	loadAppConfig()
-}
-
-func loadAppConfig() {
+func InitConfig() {
 	file, err := os.Open("common/config.json")
 	defer file.Close()
 	if err != nil {
