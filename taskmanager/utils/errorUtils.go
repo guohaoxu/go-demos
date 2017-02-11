@@ -23,10 +23,11 @@ func DisplayAppError(w http.ResponseWriter, handlerError error, message string, 
 		Message:    message,
 		HttpStatus: code,
 	}
-	log.Printf("[AppError]: %s\n", handlerError)
+	log.Fatalf("[AppError]: %s\n", handlerError)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(code)
-	if j, err := json.Marshal(errorResource{Data: errObj}); err == nil {
+	j, err := json.Marshal(errorResource{Data: errObj})
+	if err == nil {
 		w.Write(j)
 	}
 }

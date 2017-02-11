@@ -10,16 +10,10 @@ import (
 )
 
 func main() {
-
-	// Initialize AppConfig variable
 	utils.InitConfig()
-	// Initialize private/public keys for JWT authentication
 	utils.InitKeys()
-	// Start a MongoDB session
 	utils.CreateDbSession()
-	// Add indexes into MongoDB
 	utils.AddIndexes()
-
 	router := routers.InitRoutes()
 
 	n := negroni.Classic()
@@ -28,6 +22,6 @@ func main() {
 		Addr:    utils.AppConfig.Server,
 		Handler: n,
 	}
-	log.Println("Listening....")
+	log.Printf("Listening at: %s", utils.Appconfig.Server)
 	server.ListenAndServer()
 }

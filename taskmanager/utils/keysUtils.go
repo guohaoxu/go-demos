@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"crypto/rsa"
+	"errors"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -9,36 +12,52 @@ import (
 )
 
 const (
-	privKeyPath = "keys/app.rsa"
-	pubKeyPath  = "keys/app.rsa.pub"
+	privateKeyPath = "keys/app.rsa"
+	publicKeyPath  = "keys/app.rsa.pub"
 )
 
 var (
-	verifyKey, signKey []byte
+	signByte, verifyByte []byte
+	signKey              *rsa.PrivateKey
+	verifyKey            *rsa.PublicKey
 )
 
 func InitKeys() {
 	var err error
-	signKey, err = ioutil.ReadFile(privKeyPath)
+	signByte, err = ioutil.ReadFile(privateKeyPath)
 	if err != nil {
-		log.Fatalf("[initKeys]: %s\n", err)
+		log.Fatalf("[InitKeys]: %s\n", err)
 	}
-	verifyKey, err = ioutil.ReadeFile(pubKeyPath)
+	signKey, err = jwt.ParseRSAPrivateKeyFromPEM(signByte)
 	if err != nil {
-		log.Fatalf("[initKeys]: %s\n", err)
-		panic(err)
+		log.Fatalf("[InitKeys]: %s\n", err)
+	}
+
+	verifyByte, err = ioutil.ReadFile(publicKeyPath)
+	if err != nil {
+		log.Fatalf("[InitKeys]: %s\n", err)
+	}
+	verifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyByte)
+	if err != nil {
+		log.Fatalf("[InitKeys]: %s\n", err)
 	}
 }
 
 // Generate JWT token
-func GenerateJWT(name, role string) (string, error) {
-	t := jwt.New(jwt.GetSigningMethod("RS256"))
-	t.Claims["iss"] = "admin"
-	t.Claims["UserInfo"] = struct {
-		Name, role string
-	}{name, role}
-	t.Claims["exp"] = time.Now().Add(time.Minute * 20).Unix()
-	tokenString, err := t.SignedString(signKey)
+type MyCustomClaims struct {
+	Username string `json:"username"`
+	jwt.StandardClaims
+}
+
+func GenerateJWT(username string) (string, error) {
+	claims := MyCustomClaims{
+		username,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Minute).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	tokenString, err := token.SignedString(signKey)
 	if err != nil {
 		return "", err
 	}
@@ -46,14 +65,30 @@ func GenerateJWT(name, role string) (string, error) {
 }
 
 // Middleware for validating JWT token
-func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
+func Auth(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	authString := r.Header.Get("Authorization")
+	if len(authString) < 8 {
+		DisplayAppError(w, errors.New(""), "Invalid Access Token", 401)
+	}
+	tokenString := authString[7:len(authString)]
+	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return verifyKey, nil
 	})
 	if err != nil {
 		switch err.(type) {
 		case *jwt.ValidationError:
-			//
+			ve := err.(*jwt.ValidationError)
+			switch ve.Errors {
+			case jwt.ValidationErrorExpired:
+				DisplayAppError(w, err, "Token Expired", 401)
+				return
+			default:
+				DisplayAppError(w, err, "ValidationError", 500)
+				return
+			}
+		default:
+			DisplayAppError(w, err, "ValidationError", 500)
+			return
 		}
 	}
 	if token.Valid {

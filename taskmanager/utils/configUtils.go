@@ -13,14 +13,14 @@ type configuration struct {
 var AppConfig configuration
 
 func InitConfig() {
-	file, err := os.Open("common/config.json")
+	file, err := os.Open("utils/config.json")
 	defer file.Close()
 	if err != nil {
-		log.Fatalf("[loadConfig]: %s\n", err)
+		log.Fatalf("[InitConfig]: %s\n", err)
 	}
 	AppConfig = configuration{}
 	err = json.NewDecoder(file).Decode(&AppConfig)
 	if err != nil {
-		log.Fatalf("[loadAppConfig]: %s\n", err)
+		log.Fatalf("[InitConfig]: %s\n", err)
 	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rsa"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -18,13 +19,15 @@ import (
  * openssl rsa -in app.rsa -pubout > app.rsa.pub
  */
 const (
-	privKeyPath = "keys/app.rsa"
-	pubKeyPath  = "keys/app.rsa.pub"
+	privateKeyPath = "keys/app.rsa"
+	publicKeyPath  = "keys/app.rsa.pub"
 )
 
-var verifyKey, signKey []byte
-
-var verifyKey2, signKey2 interface{}
+var (
+	signByte, verifyByte []byte
+	signKey              *rsa.PrivateKey
+	verifyKey            *rsa.PublicKey
+)
 
 type User struct {
 	Username string `json:"username"`
@@ -43,21 +46,21 @@ type MyCustomClaims struct {
 
 func init() {
 	var err error
-	signKey, err = ioutil.ReadFile(privKeyPath)
+	signByte, err = ioutil.ReadFile(privateKeyPath)
 	if err != nil {
 		log.Fatal("Error reading private key")
 		return
 	}
-	signKey2, err = jwt.ParseRSAPrivateKeyFromPEM(signKey)
+	signKey, err = jwt.ParseRSAPrivateKeyFromPEM(signByte)
 	if err != nil {
 		panic(err)
 	}
-	verifyKey, err = ioutil.ReadFile(pubKeyPath)
+	verifyByte, err = ioutil.ReadFile(publicKeyPath)
 	if err != nil {
 		log.Fatal("Error reading private2 key")
 		return
 	}
-	verifyKey2, err = jwt.ParseRSAPublicKeyFromPEM(verifyKey)
+	verifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyByte)
 	if err != nil {
 		panic(err)
 	}
@@ -83,7 +86,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	t := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	tokenString, err := t.SignedString(signKey2)
+	tokenString, err := t.SignedString(signKey)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, "Sorry, error while Signing Token!")
@@ -104,7 +107,7 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tokenString := authString[7:len(authString)]
 	t, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return verifyKey2, nil
+		return verifyKey, nil
 	})
 
 	if err != nil {
@@ -162,6 +165,6 @@ func main() {
 		Addr:    ":8000",
 		Handler: r,
 	}
-	log.Println("Listening...")
+	log.Printf("Listening at ", server.Addr)
 	server.ListenAndServe()
 }
