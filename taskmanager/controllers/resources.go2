@@ -1,7 +1,5 @@
 package controllers
 
-import "go-demos/taskmanager/models"
-
 type (
 	// POST /user/register
 	UserResource struct {

@@ -17,11 +17,12 @@ func main() {
 	router := routers.InitRoutes()
 
 	n := negroni.Classic()
-	n.useHandler(router)
+	n.UseHandler(router)
+
 	server := &http.Server{
 		Addr:    utils.AppConfig.Server,
 		Handler: n,
 	}
-	log.Printf("Listening at: %s", utils.Appconfig.Server)
-	server.ListenAndServer()
+	log.Printf("Listening at: %s", utils.AppConfig.Server)
+	server.ListenAndServe()
 }
