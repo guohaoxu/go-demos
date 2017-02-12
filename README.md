@@ -5,3 +5,7 @@
 登录注册 增删改查
 
 ![](./http_web/public/img/readme.jpg)
+
+## taskmanger
+RESTful API
+![](./taskmanager/task.jpg)

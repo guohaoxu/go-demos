@@ -10,14 +10,13 @@ import (
 
 func InitRoutes() *mux.Router {
 	router := mux.NewRouter()
-	router2 := mux.NewRouter()
+	// router2 := mux.NewRouter()
 
 	router.HandleFunc("/users/register", controllers.Register).Methods("POST")
 	router.HandleFunc("/users/login", controllers.Login).Methods("POST")
 
-	router2.PathPrefix("/tasks").Handler(negroni.New(
+	router.PathPrefix("/tasks").Handler(negroni.New(
 		negroni.HandlerFunc(utils.Auth),
-		negroni.Wrap(router),
 	))
 	router.HandleFunc("/tasks", controllers.GetTasks).Methods("GET")
 	router.HandleFunc("/tasks", controllers.CreateTask).Methods("POST")
@@ -26,5 +25,5 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/tasks/{id}", controllers.DeleteTask).Methods("DELETE")
 	router.HandleFunc("/tasks/users/{username}", controllers.GetTasksByUser).Methods("GET")
 
-	return router2
+	return router
 }
