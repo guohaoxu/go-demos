@@ -9,7 +9,7 @@ import (
 
 type (
 	User struct {
-		Id           bson.ObjectId `json:"_id,omitempty" json:"id"`
+		Id           bson.ObjectId `bson:"_id,omitempty" json:"id"`
 		Username     string        `json:"username"`
 		Email        string        `json:"email"`
 		Password     string        `json:"password,omitrmpty"`
@@ -50,7 +50,7 @@ func (r *UserModel) Login(user User) (u User, err error) {
 		return
 	}
 	if u.Password != user.Password {
-		err = errors.New("")
+		err = errors.New("密码错误!")
 	}
 	return
 	// err = bcrypt.CompareHashAndPasswprd(u.HashPassword, []byte(user.Password))

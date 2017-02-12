@@ -2,7 +2,6 @@ package utils
 
 import (
 	"crypto/rsa"
-	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -53,7 +52,7 @@ func GenerateJWT(username string) (string, error) {
 	claims := MyCustomClaims{
 		username,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
@@ -68,7 +67,8 @@ func GenerateJWT(username string) (string, error) {
 func Auth(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	authString := r.Header.Get("Authorization")
 	if len(authString) < 8 {
-		DisplayAppError(w, errors.New(""), "Invalid Access Token", 401)
+		DisplayAppError(w, "Invalid Access Token", 401)
+		return
 	}
 	tokenString := authString[7:len(authString)]
 	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
@@ -80,20 +80,22 @@ func Auth(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 			ve := err.(*jwt.ValidationError)
 			switch ve.Errors {
 			case jwt.ValidationErrorExpired:
-				DisplayAppError(w, err, "Token Expired", 401)
+				DisplayAppError(w, "Token Expired", 401)
 				return
 			default:
-				DisplayAppError(w, err, "ValidationError", 500)
+				DisplayAppError(w, "ValidationError", 500)
 				return
 			}
 		default:
-			DisplayAppError(w, err, "ValidationError", 500)
+			DisplayAppError(w, "ValidationError", 500)
 			return
 		}
 	}
 	if token.Valid {
+		log.Print("-5-")
 		next(w, r)
+		return
 	} else {
-		DisplayAppError(w, err, "Invalid Access Token", 401)
+		DisplayAppError(w, "Invalid Access Token", 401)
 	}
 }
