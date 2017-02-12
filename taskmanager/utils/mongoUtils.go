@@ -18,7 +18,7 @@ func CreateDbSession() {
 		Timeout:  60 * time.Second,
 	})
 	if err != nil {
-		log.Fatalf("[CreteDbSession]: %s\n", err)
+		log.Printf("[CreteDbSession]: %s\n", err)
 	}
 }
 
@@ -50,10 +50,10 @@ func AddIndexes() {
 	taskCol := session.DB(AppConfig.Database).C("tasks")
 	err = userCol.EnsureIndex(userIndex)
 	if err != nil {
-		log.Fatalf("[AddIndexes]: %s\n", err)
+		log.Printf("[AddIndexes]: %s\n", err)
 	}
 	err = taskCol.EnsureIndex(taskIndex)
 	if err != nil {
-		log.Fatalf("[AddIndexes]: %s\n", err)
+		log.Printf("[AddIndexes]: %s\n", err)
 	}
 }

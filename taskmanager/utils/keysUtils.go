@@ -26,20 +26,20 @@ func InitKeys() {
 	var err error
 	signByte, err = ioutil.ReadFile(privateKeyPath)
 	if err != nil {
-		log.Fatalf("[InitKeys]: %s\n", err)
+		log.Printf("[InitKeys]: %s\n", err)
 	}
 	signKey, err = jwt.ParseRSAPrivateKeyFromPEM(signByte)
 	if err != nil {
-		log.Fatalf("[InitKeys]: %s\n", err)
+		log.Printf("[InitKeys]: %s\n", err)
 	}
 
 	verifyByte, err = ioutil.ReadFile(publicKeyPath)
 	if err != nil {
-		log.Fatalf("[InitKeys]: %s\n", err)
+		log.Printf("[InitKeys]: %s\n", err)
 	}
 	verifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyByte)
 	if err != nil {
-		log.Fatalf("[InitKeys]: %s\n", err)
+		log.Printf("[InitKeys]: %s\n", err)
 	}
 }
 

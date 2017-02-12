@@ -22,16 +22,26 @@ type (
 )
 
 func (r *UserModel) CreateUser(user User) (u User, err error) {
-	user.Id = bson.NewObjectId()
+	// 查询用户名是否已存在
+	resultOne := User{}
+	err = r.C.Find(bson.M{"username": user.Username}).One(&resultOne)
+	if err != nil {
+		// 用户名不存在
+		user.Id = bson.NewObjectId()
+		u = user
+		err = r.C.Insert(user)
+		return
+	} else {
+		// 用户名已存在
+		err = errors.New("用户名已存在!")
+		return
+	}
 	// hpass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	// if err != nil {
 	// 	panic(err)
 	// }
 	// user.HashPassword = hpass
 	// user.Password = ""
-	err = r.C.Insert(user)
-	u = user
-	return
 }
 
 func (r *UserModel) Login(user User) (u User, err error) {

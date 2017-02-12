@@ -48,7 +48,7 @@ func init() {
 	var err error
 	signByte, err = ioutil.ReadFile(privateKeyPath)
 	if err != nil {
-		log.Fatal("Error reading private key")
+		log.Print("Error reading private key")
 		return
 	}
 	signKey, err = jwt.ParseRSAPrivateKeyFromPEM(signByte)
@@ -57,7 +57,7 @@ func init() {
 	}
 	verifyByte, err = ioutil.ReadFile(publicKeyPath)
 	if err != nil {
-		log.Fatal("Error reading private2 key")
+		log.Print("Error reading private2 key")
 		return
 	}
 	verifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyByte)

@@ -40,7 +40,7 @@ func main() {
 	}
 	err = c.Insert(&doc)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 	err = c.Insert(&Category{
 		bson.NewObjectId(), "R & D", "R & D Tasks"}, &Category{bson.NewObjectId(), "Project", "Project Tasks"})
@@ -58,11 +58,11 @@ func main() {
 	}
 	err = c.Insert(docD)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 	count, err := c.Count()
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	} else {
 		fmt.Printf("%d records inserted", count)
 	}
@@ -73,13 +73,13 @@ func main() {
 		fmt.Printf("Category:%s, Description:%s\n", result.Name, result.Description)
 	}
 	if err = iter.Close(); err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 	// Retrieving a single record----------------------------------
 	result_one := Category{}
 	err = c.Find(bson.M{"name": "Open Source"}).One(&result_one)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 	fmt.Printf("Category%s, Description:%s\n", result_one.Name, result_one.Description)
 	// Updateing Dpcuments----------------------------------
@@ -88,12 +88,12 @@ func main() {
 		"desciption": "Updating open source projects",
 	}})
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 	// Deleting Dpcuments----------------------------------
 	err = c.Remove(bson.M{"_id": id})
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 	c.RemoveAll(nil)
 	// Indexes----------------------------------
