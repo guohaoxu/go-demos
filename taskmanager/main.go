@@ -14,9 +14,6 @@ func main() {
 	utils.AddIndexes()
 	router := routers.InitRoutes()
 
-	// n := negroni.Classic()
-	// n.UseHandler(router)
-
 	server := &http.Server{
 		Addr:    utils.AppConfig.Server,
 		Handler: router,
