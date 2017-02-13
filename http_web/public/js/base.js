@@ -15,4 +15,8 @@ $(function(){
     }
   });
 
+  $.get("http://localhost:3000/tasks",{},function(data){
+    console.log(data)
+  })
+
 });

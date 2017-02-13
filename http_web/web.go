@@ -548,8 +548,16 @@ func main() {
 	r.Handle("/users/add", handlers.LoggingHandler(logFile, handlers.CompressHandler(addUserHandler)))
 	r.Handle("/users/auth", handlers.LoggingHandler(logFile, handlers.CompressHandler(loginAuthHandler)))
 
-	r.Handle("/", handlers.LoggingHandler(logFile, handlers.CompressHandler(getNotesHandler)))
+	// canonical := handlers.CanonicalHost("http://localhost:3001", 302)
+	// r.Handle("/", canonical(getNotesHandler))
+
+	r.Handle("/", handlers.CombinedLoggingHandler(os.Stdout, handlers.CompressHandler(getNotesHandler)))
+	r.Handle("/a", handlers.RecoveryHandler()(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		panic("Unexpected error!")
+	})))
+
 	r.Handle("/notes/add", handlers.LoggingHandler(logFile, handlers.CompressHandler(addNoteHandler)))
+
 	r.Handle("/notes/save", handlers.LoggingHandler(logFile, handlers.CompressHandler(saveNoteHandler)))
 	r.Handle("/notes/edit/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(editNoteHandler)))
 	r.Handle("/notes/update/{id}", handlers.LoggingHandler(logFile, handlers.CompressHandler(updateNoteHandler)))
