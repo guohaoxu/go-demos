@@ -64,38 +64,39 @@ func GenerateJWT(username string) (string, error) {
 }
 
 // Middleware for validating JWT token
-func Auth(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	authString := r.Header.Get("Authorization")
-	if len(authString) < 8 {
-		DisplayAppError(w, "Invalid Access Token", 401)
-		return
-	}
-	tokenString := authString[7:len(authString)]
-	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return verifyKey, nil
-	})
-	if err != nil {
-		switch err.(type) {
-		case *jwt.ValidationError:
-			ve := err.(*jwt.ValidationError)
-			switch ve.Errors {
-			case jwt.ValidationErrorExpired:
-				DisplayAppError(w, "Token Expired", 401)
-				return
+func Auth(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		authString := r.Header.Get("Authorization")
+		if len(authString) < 8 {
+			DisplayAppError(w, "Invalid Access Token", 401)
+			return
+		}
+		tokenString := authString[7:len(authString)]
+		token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return verifyKey, nil
+		})
+		if err != nil {
+			switch err.(type) {
+			case *jwt.ValidationError:
+				ve := err.(*jwt.ValidationError)
+				switch ve.Errors {
+				case jwt.ValidationErrorExpired:
+					DisplayAppError(w, "Token Expired", 401)
+					return
+				default:
+					DisplayAppError(w, "ValidationError", 500)
+					return
+				}
 			default:
 				DisplayAppError(w, "ValidationError", 500)
 				return
 			}
-		default:
-			DisplayAppError(w, "ValidationError", 500)
-			return
+		}
+		if token.Valid {
+			next(w, r)
+		} else {
+			DisplayAppError(w, "Invalid Access Token", 401)
 		}
 	}
-	if token.Valid {
-		log.Print("-5-")
-		next(w, r)
-		return
-	} else {
-		DisplayAppError(w, "Invalid Access Token", 401)
-	}
+
 }
