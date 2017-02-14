@@ -2,17 +2,23 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"go-demos/taskmanager/models"
 	"go-demos/taskmanager/utils"
 	"net/http"
 
 	"gopkg.in/mgo.v2/bson"
 
+	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 )
 
 // GET /tasks
 func GetTasks(w http.ResponseWriter, r *http.Request) {
+	var Username string
+	if rv := context.Get(r, Username); rv != nil {
+		fmt.Println("Username from context: ", rv)
+	}
 	// 连接shujuku
 	session := utils.GetSession().Copy()
 	defer session.Close()

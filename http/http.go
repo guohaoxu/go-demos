@@ -19,7 +19,7 @@ func messHandlerFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func iconHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./favicon.ico")
+	http.ServeFile(w, r, "./public/favicon.ico")
 }
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 	mux.HandleFunc("/about", messHandlerFunc)
 
 	server := &http.Server{
-		Addr:    ":3000",
+		Addr:    ":3003",
 		Handler: mux,
 	}
 	log.Println("Listening...")

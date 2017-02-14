@@ -5,8 +5,7 @@ import (
 	"go-demos/taskmanager/routers"
 	"go-demos/taskmanager/utils"
 	"log"
-
-	"github.com/codegangsta/negroni"
+	"net/http"
 )
 
 func main() {
@@ -15,9 +14,11 @@ func main() {
 	utils.CreateDbSession()
 	utils.AddIndexes()
 
-	router := routers.InitRoutes()
-	n := negroni.Classic()
-	n.UseHandler(router)
-	n.Run(utils.AppConfig.Server)
+	r := routers.InitRoutes()
+	server := &http.Server{
+		Addr:    utils.AppConfig.Server,
+		Handler: r,
+	}
 	log.Printf("Listening at: %s", utils.AppConfig.Server)
+	server.ListenAndServe()
 }

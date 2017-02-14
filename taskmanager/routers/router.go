@@ -34,22 +34,22 @@ func MyHandler(next http.HandlerFunc) http.Handler {
 }
 
 func InitRoutes() *mux.Router {
+
 	r := mux.NewRouter()
 
-	r.Handle("/tasks", MyHandler(controllers.GetTasks)).Methods("GET")
+	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		utils.DisplayAppError(w, "404", http.StatusNotFound)
+	})
 
-	r.Handle("/error", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		panic("Unexpected error!")
-	}))
+	r.Handle("/users/register", MyHandler(controllers.Register)).Methods("POST")
+	r.Handle("/users/login", MyHandler(controllers.Login)).Methods("POST")
 
-	r.HandleFunc("/users/register", controllers.Register).Methods("POST")
-	r.HandleFunc("/users/login", controllers.Login).Methods("POST")
-
-	r.HandleFunc("/tasks", utils.Auth(controllers.CreateTask)).Methods("POST")
-	r.HandleFunc("/tasks/{id}", utils.Auth(controllers.GetTaskById)).Methods("GET")
-	r.HandleFunc("/tasks/{id}", utils.Auth(controllers.UpdateTask)).Methods("PUT")
-	r.HandleFunc("/tasks/{id}", utils.Auth(controllers.DeleteTask)).Methods("DELETE")
-	r.HandleFunc("/tasks/users/{username}", utils.Auth(controllers.GetTasksByUser)).Methods("GET")
+	r.Handle("/tasks", MyHandler(utils.Auth(controllers.GetTasks))).Methods("GET")
+	r.Handle("/tasks", MyHandler(utils.Auth(controllers.CreateTask))).Methods("POST")
+	r.Handle("/tasks/{id}", MyHandler(utils.Auth(controllers.GetTaskById))).Methods("GET")
+	r.Handle("/tasks/{id}", MyHandler(utils.Auth(controllers.UpdateTask))).Methods("PUT")
+	r.Handle("/tasks/{id}", MyHandler(utils.Auth(controllers.DeleteTask))).Methods("DELETE")
+	r.Handle("/tasks/users/{username}", MyHandler(utils.Auth(controllers.GetTasksByUser))).Methods("GET")
 
 	return r
 }

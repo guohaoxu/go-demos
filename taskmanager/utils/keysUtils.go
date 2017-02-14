@@ -8,6 +8,7 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/context"
 )
 
 const (
@@ -68,7 +69,7 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		authString := r.Header.Get("Authorization")
 		if len(authString) < 8 {
-			DisplayAppError(w, "Invalid Access Token", 401)
+			DisplayAppError(w, "Invalid Access Token", http.StatusUnauthorized)
 			return
 		}
 		tokenString := authString[7:len(authString)]
@@ -81,21 +82,29 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 				ve := err.(*jwt.ValidationError)
 				switch ve.Errors {
 				case jwt.ValidationErrorExpired:
-					DisplayAppError(w, "Token Expired", 401)
+					DisplayAppError(w, "Token Expired", http.StatusUnauthorized)
 					return
 				default:
-					DisplayAppError(w, "ValidationError", 500)
+					DisplayAppError(w, "ValidationError", http.StatusUnauthorized)
 					return
 				}
 			default:
-				DisplayAppError(w, "ValidationError", 500)
+				DisplayAppError(w, "ValidationError", http.StatusUnauthorized)
 				return
 			}
 		}
 		if token.Valid {
-			next(w, r)
+			var Username string
+			if claims, ok := token.Claims.(*MyCustomClaims); ok {
+				// fmt.Println(claims.Username)
+				// fmt.Println(claims.StandardClaims.ExpiresAt)
+				context.Set(r, Username, claims.Username)
+				next(w, r)
+			} else {
+				DisplayAppError(w, "An unexpected error has occurred", http.StatusInternalServerError)
+			}
 		} else {
-			DisplayAppError(w, "Invalid Access Token", 401)
+			DisplayAppError(w, "Invalid Access Token", http.StatusUnauthorized)
 		}
 	}
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -523,10 +524,14 @@ func main() {
 		panic(err2)
 	}
 
-	r := mux.NewRouter()
+	r := mux.NewRouter().StrictSlash(true)
 	r.HandleFunc("/favicon.ico", iconHandler)
 
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", handlers.LoggingHandler(logFile, handlers.CompressHandler(http.FileServer(http.Dir("public"))))))
+
+	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "<h1>404</h1>")
+	})
 
 	logupHandler := http.HandlerFunc(logup)
 	loginHandler := http.HandlerFunc(login)

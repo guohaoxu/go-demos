@@ -1,5 +1,5 @@
 {
-  "Server": "localhost:3000",
+  "Server": "localhost:3001",
   "MongoDBHost": "localhost",
   "DBUSer": "",
   "DBPwd": "",
