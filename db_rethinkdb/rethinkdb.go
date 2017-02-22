@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	r "github.com/dancannon/gorethink"
 )
 
 var store BookmarkStore

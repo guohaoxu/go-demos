@@ -1,9 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
 
-r "github.com/dancannon/gorethink"
-
+	r "github.com/dancannon/gorethink"
+)
 
 type Bookmark struct {
 	ID                          string `gorethink:"id,omitempty" json:"id"`
