@@ -1,3 +1,4 @@
+// mysql demo
 package main
 
 import (
