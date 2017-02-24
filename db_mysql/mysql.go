@@ -15,9 +15,13 @@ func checkErr(err error) {
 }
 
 func main() {
-	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test")
+	db, err := sql.Open("mysql", "root:root2@tcp(127.0.0.1:3306)/db_test")
 	checkErr(err)
 	defer db.Close()
+
+	err = db.Ping()
+	checkErr(err)
+	fmt.Println("Mysql connected...")
 
 	// 更新数据
 	stmt, err := db.Prepare("INSERT userinfo SET username=?, departname=?, created=?")
