@@ -1,0 +1,17 @@
+package main
+
+import "testing"
+
+func TestMultiTable(t *testing.T) {
+	result := showNumber()
+	expected := 10
+	if result != expected {
+		t.Errorf("testMultiTable() == %d, expected %d", result, expected)
+	}
+}
+
+func BenchmarkMain(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		main()
+	}
+}
