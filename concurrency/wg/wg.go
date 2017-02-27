@@ -16,7 +16,7 @@ func multiTable(goGroup *sync.WaitGroup) {
 	}
 }
 
-func main() {
+func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	goGroup := new(sync.WaitGroup)
